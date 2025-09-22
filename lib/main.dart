@@ -27,11 +27,11 @@ class WorkItem {
 final List<WorkItem> works = <WorkItem>[
   WorkItem(title: 'About This App', builder: (context) => const _AboutWork()),
   WorkItem(
-    title: 'Counter (Cupertino)',
-    builder: (context) => const _CounterWork(),
+    title: '[lab 1] ioControl [On/Off]',
+    builder: (context) => const _IoControlWorkOnOff(),
   ),
   WorkItem(
-    title: 'Device Control (HTTP)',
+    title: '[lab 2] ioControl',
     builder: (context) => const _IoControlWork(),
   ),
 ];
@@ -239,50 +239,111 @@ class _AboutWork extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const <Widget>[
         Text(
-          'Welcome!',
+          'Текст',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 8),
-        Text(
-          'This app showcases multiple small works using Cupertino widgets.',
-        ),
+        Text('Мета-лаба - лаба для показа лаб'),
       ],
     );
   }
 }
 
-class _CounterWork extends StatefulWidget {
-  const _CounterWork();
+class _IoControlWorkOnOff extends StatefulWidget {
+  const _IoControlWorkOnOff();
   @override
-  State<_CounterWork> createState() => _CounterWorkState();
+  State<_IoControlWorkOnOff> createState() => _IoControlWorkOnOffState();
 }
 
-class _CounterWorkState extends State<_CounterWork> {
-  int _count = 0;
+class _IoControlWorkOnOffState extends State<_IoControlWorkOnOff> {
+  int _isTurnedOn = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialState();
+  }
+
+  Future<void> _loadInitialState() async {
+    try {
+      final deviceUri = Uri.parse(
+        'http://iocontrol.ru/api/readData/slesarevdaiu9/aaa',
+      );
+      final deviceRes = await http.get(deviceUri);
+      final deviceJson = json.decode(deviceRes.body);
+      final int isOn = int.parse(deviceJson['value'].toString());
+
+      if (!mounted) return;
+      setState(() {
+        _isTurnedOn = isOn;
+      });
+    } catch (e) {
+      print('Initial state load error: $e');
+    }
+  }
+
+  Future<void> _getDeviceRequestON() async {
+    try {
+      final onUri = Uri.parse(
+        'http://iocontrol.ru/api/sendData/slesarevdaiu9/aaa/1',
+      );
+      await http.get(onUri);
+      setState(() {
+        _isTurnedOn = 1;
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print('Turn ON or read slider error: $e');
+    }
+  }
+
+  Future<void> _getRequestOFF() async {
+    if (_isTurnedOn == 0) return;
+    try {
+      final offUri = Uri.parse(
+        'http://iocontrol.ru/api/sendData/slesarevdaiu9/aaa/0',
+      );
+      await http.get(offUri);
+      setState(() {
+        _isTurnedOn = 0;
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print('Turn OFF error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Text(
-          'Counter',
+          'Device Control (HTTP)',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 12),
-        Text('Value: $_count', style: const TextStyle(fontSize: 18)),
-        const SizedBox(height: 12),
         Row(
           children: <Widget>[
-            CupertinoButton.filled(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              onPressed: () => setState(() => _count++),
-              child: const Text('+1'),
-            ),
+            (_isTurnedOn == 1)
+                ? CupertinoButton.filled(
+                    onPressed: _getDeviceRequestON,
+                    child: const Text('ON'),
+                  )
+                : CupertinoButton(
+                    onPressed: _getDeviceRequestON,
+                    child: const Text('ON'),
+                  ),
             const SizedBox(width: 12),
-            CupertinoButton(
-              onPressed: () => setState(() => _count = 0),
-              child: const Text('Reset'),
-            ),
+            (_isTurnedOn == 0)
+                ? CupertinoButton.filled(
+                    onPressed: _getRequestOFF,
+                    child: const Text('OFF'),
+                  )
+                : CupertinoButton(
+                    onPressed: _getRequestOFF,
+                    child: const Text('OFF'),
+                  ),
           ],
         ),
       ],
@@ -328,11 +389,6 @@ class _IoControlWorkState extends State<_IoControlWork> {
         _sliderValue = slider;
       });
     } catch (e) {
-      // Print initial load errors to console
-      // Note: keep UI responsive even on error
-      // You can enhance by showing a Cupertino alert later if desired
-      // but for now we log to console as requested
-      // ignore: avoid_print
       print('Initial state load error: $e');
     }
   }
