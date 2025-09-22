@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:untitiled2/lab1.dart';
 import 'package:untitiled2/lab2.dart';
+import 'package:untitiled2/lab4.dart';
+import 'package:untitiled2/lab4_demo.dart';
 
 void main() {
   runApp(const LabsApp());
@@ -34,6 +36,14 @@ final List<LabItem> labs = <LabItem>[
     title: '[lab 2] ioControl',
     builder: (context) => const IoControlWork(),
   ),
+  LabItem(
+    title: '[lab 4] Animation Controller demo',
+    builder: (context) => const AnimationControllerDemo(),
+  ),
+  LabItem(
+    title: '[lab 4] Animation Controller',
+    builder: (context) => const AnimationControllerWork(),
+  )
 ];
 
 class WorkHomePage extends StatefulWidget {
@@ -112,6 +122,7 @@ class _WorkSelectionListCompact extends StatelessWidget {
     );
   }
 }
+
 
 // ---- Demo work widgets ----
 
