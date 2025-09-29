@@ -5,6 +5,7 @@ import 'package:untitiled2/lab4.dart';
 import 'package:untitiled2/lab4_demo.dart';
 import 'package:untitiled2/mysql_auth_app.dart';
 import 'package:untitiled2/mqtt.dart';
+import 'package:untitiled2/training.dart';
 
 void main() {
   runApp(const LabsApp());
@@ -50,10 +51,15 @@ final List<LabItem> labs = <LabItem>[
     title: '[MySQL] Database Authorization App',
     builder: (context) => MySqlAuthApp(),
   ),
+  LabItem(title: '[MQTT] Messaging App', builder: (context) => MqttApp()),
   LabItem(
-    title: '[MQTT] Messaging App',
-    builder: (context) => MqttApp(),
-  )
+    title: "Stateful Training",
+    builder: (context) => StatefullTrainWidget(test: "test"),
+  ),
+  LabItem(
+    title: "Stateless Training",
+    builder: (context) => TrainingLabWidget(),
+  ),
 ];
 
 class WorkHomePage extends StatefulWidget {
@@ -132,7 +138,6 @@ class _WorkSelectionListCompact extends StatelessWidget {
     );
   }
 }
-
 
 // ---- Demo work widgets ----
 
