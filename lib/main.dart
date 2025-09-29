@@ -3,6 +3,7 @@ import 'package:untitiled2/lab1.dart';
 import 'package:untitiled2/lab2.dart';
 import 'package:untitiled2/lab4.dart';
 import 'package:untitiled2/lab4_demo.dart';
+import 'package:untitiled2/lab5.dart';
 import 'package:untitiled2/mysql_auth_app.dart';
 import 'package:untitiled2/mqtt.dart';
 import 'package:untitiled2/training.dart';
@@ -52,14 +53,16 @@ final List<LabItem> labs = <LabItem>[
     builder: (context) => MySqlAuthApp(),
   ),
   LabItem(title: '[MQTT] Messaging App', builder: (context) => MqttApp()),
-  LabItem(
-    title: "Stateful Training",
-    builder: (context) => StatefullTrainWidget(test: "test"),
-  ),
-  LabItem(
-    title: "Stateless Training",
-    builder: (context) => TrainingLabWidget(),
-  ),
+  LabItem(title: '[lab 5.1] WebSockets App', builder: (context) => CloudComputer()),
+  
+  // LabItem(
+  //   title: "Stateful Training",
+  //   builder: (context) => StatefullTrainWidget(test: "test"),
+  // ),
+  // LabItem(
+  //   title: "Stateless Training",
+  //   builder: (context) => TrainingLabWidget(),
+  // ),
 ];
 
 class WorkHomePage extends StatefulWidget {
