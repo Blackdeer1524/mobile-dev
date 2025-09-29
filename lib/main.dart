@@ -3,6 +3,8 @@ import 'package:untitiled2/lab1.dart';
 import 'package:untitiled2/lab2.dart';
 import 'package:untitiled2/lab4.dart';
 import 'package:untitiled2/lab4_demo.dart';
+import 'package:untitiled2/mysql_auth_app.dart';
+import 'package:untitiled2/mqtt.dart';
 
 void main() {
   runApp(const LabsApp());
@@ -43,6 +45,14 @@ final List<LabItem> labs = <LabItem>[
   LabItem(
     title: '[lab 4] Animation Controller',
     builder: (context) => const AnimationControllerWork(),
+  ),
+  LabItem(
+    title: '[MySQL] Database Authorization App',
+    builder: (context) => MySqlAuthApp(),
+  ),
+  LabItem(
+    title: '[MQTT] Messaging App',
+    builder: (context) => MqttApp(),
   )
 ];
 
