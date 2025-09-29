@@ -7,7 +7,7 @@ import websockets
 from websockets.server import WebSocketServerProtocol
 
 
-def as_double(value: Any) -> Optional[float]:
+def as_double(value):
   if isinstance(value, (int, float)):
     return float(value)
   if isinstance(value, str):
@@ -18,11 +18,11 @@ def as_double(value: Any) -> Optional[float]:
   return None
 
 
-async def send_json(ws: WebSocketServerProtocol, payload: Dict[str, Any]) -> None:
+async def send_json(ws: WebSocketServerProtocol, payload) -> None:
   await ws.send(json.dumps(payload))
 
 
-async def send_ok(ws: WebSocketServerProtocol, payload: Dict[str, Any]) -> None:
+async def send_ok(ws: WebSocketServerProtocol, payload) -> None:
   res = {"type": "ok", **payload}
   print(res)
   await send_json(ws, res)
@@ -104,7 +104,7 @@ def create_handler():
   return handler
 
 
-async def main_async(argv: list[str]) -> None:
+async def main_async(argv) -> None:
   host = argv[1] if len(argv) > 1 else "127.0.0.1"
   try:
     port = int(argv[2]) if len(argv) > 2 else 8080
