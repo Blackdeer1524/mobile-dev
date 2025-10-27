@@ -13,32 +13,48 @@ class HandLab extends StatefulWidget {
 class _HandLabState extends State<HandLab> {
   var fingerAngle = 0.0;
   var handXAxisDisplacement = 0.0;
-  var handYAxisDisplacement = 0.0;
+  var handZAxisDisplacement = 0.0;
 
   var sphereXAxisDisplacement = 0.0;
-  var sphereYAxisDisplacement = 0.0;
+  var sphereZAxisDisplacement = -5.0;
   var isGraspingSphere = false;
   final Future<List<Mesh3D>> sceneObjs = _generatePoints();
 
+  bool _isSphereGrabbable() {
+    var dz = handZAxisDisplacement - sphereZAxisDisplacement;
+    var dx = handXAxisDisplacement - sphereXAxisDisplacement;
+
+    if (dz >= 0) {
+      final distance = sqrt(dx * dx + dz * dz);
+      return distance < 6.0;
+    }
+    return false;
+  }
+
   bool _isNearSphere() {
     final dx = handXAxisDisplacement - sphereXAxisDisplacement;
-    final dy = handYAxisDisplacement - sphereYAxisDisplacement;
+    final dy = handZAxisDisplacement - sphereZAxisDisplacement;
     final distance = sqrt(dx * dx + dy * dy);
     return distance < 3.0;
   }
 
-  void _updateHandPosition(double deltaX, double deltaY) {
+  void _updateHandPosition(double deltaX, double deltaZ) {
     setState(() {
-      if (fingerAngle == 12 && _isNearSphere()) {
+      handXAxisDisplacement += deltaX;
+      handZAxisDisplacement += deltaZ;
+      if (fingerAngle == 12 && _isSphereGrabbable()) {
         isGraspingSphere = true;
         sphereXAxisDisplacement += deltaX;
-        sphereYAxisDisplacement += deltaY;
+        sphereZAxisDisplacement += deltaZ;
       } else if (fingerAngle == 0) {
         isGraspingSphere = false;
+        if (_isNearSphere()) {
+          handXAxisDisplacement -= deltaX;
+          handZAxisDisplacement -= deltaZ;
+          return;
+        }
       }
 
-      handXAxisDisplacement += deltaX;
-      handYAxisDisplacement += deltaY;
     });
   }
 
@@ -72,8 +88,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   handXAxisDisplacement,
-                                  handYAxisDisplacement,
                                   0,
+                                  handZAxisDisplacement,
                                 )
                                 ..rotateX(-pi / 2),
                             ),
@@ -82,8 +98,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   handXAxisDisplacement,
-                                  handYAxisDisplacement,
                                   0,
+                                  handZAxisDisplacement,
                                 )
                                 ..rotateX(-pi / 2)
                                 ..translate(3.05, 1.15, 8.75)
@@ -96,8 +112,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   handXAxisDisplacement,
-                                  handYAxisDisplacement,
                                   0,
+                                  handZAxisDisplacement,
                                 )
                                 ..rotateX(-pi / 2)
                                 ..translate(0.7, 0.0, 9.75)
@@ -110,8 +126,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   handXAxisDisplacement,
-                                  handYAxisDisplacement,
                                   0,
+                                  handZAxisDisplacement,
                                 )
                                 ..rotateX(-pi / 2)
                                 ..translate(-2.0, -0.56, 9.1)
@@ -124,8 +140,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   handXAxisDisplacement,
-                                  handYAxisDisplacement,
                                   0,
+                                  handZAxisDisplacement,
                                 )
                                 ..rotateX(-pi / 2)
                                 ..translate(-4.65, -1.0, 7.15)
@@ -138,8 +154,8 @@ class _HandLabState extends State<HandLab> {
                               Matrix4.identity()
                                 ..translate(
                                   sphereXAxisDisplacement,
-                                  sphereYAxisDisplacement,
-                                  -2,
+                                  0,
+                                  sphereZAxisDisplacement,
                                 )
                                 ..scaleByDouble(2, 2, 2, 1),
                             ),
@@ -240,7 +256,7 @@ class _HandLabState extends State<HandLab> {
                                     child: const Text('↑'),
                                   ),
                                   Text(
-                                    "Y: ${handYAxisDisplacement.toStringAsFixed(1)}",
+                                    "Z: ${handZAxisDisplacement.toStringAsFixed(1)}",
                                   ),
                                   CupertinoButton(
                                     color: CupertinoColors.activeBlue,
