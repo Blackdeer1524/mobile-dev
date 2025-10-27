@@ -64,7 +64,7 @@ final List<LabItem> labs = <LabItem>[
     builder: (context) => IoControlWS(),
   ),
   LabItem(
-    title: '[lab 6] WebSockets App',
+    title: '[lab 6] MapKit',
     builder: (context) => ObjectsMapPage(
       dataUrl:
           'http://pstgu.yss.su/iu9/mobiledev/lab4_yandex_map/2023.php?x=var20',
