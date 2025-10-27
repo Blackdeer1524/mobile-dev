@@ -6,6 +6,7 @@ import 'package:untitiled2/lab4_demo.dart';
 import 'package:untitiled2/lab5.dart';
 import 'package:untitiled2/lab5_3.dart';
 import 'package:untitiled2/lab6.dart';
+import 'package:untitiled2/lab8.dart';
 import 'package:untitiled2/mysql_auth_app.dart';
 import 'package:untitiled2/mqtt.dart';
 
@@ -69,6 +70,10 @@ final List<LabItem> labs = <LabItem>[
       dataUrl:
           'http://pstgu.yss.su/iu9/mobiledev/lab4_yandex_map/2023.php?x=var20',
     ),
+  ),
+  LabItem(
+    title: '[lab 8] Hand Manipulation',
+    builder: (context) => HandLab(),
   ),
 ];
 
